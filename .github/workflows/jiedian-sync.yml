@@ -1,0 +1,22 @@
+name: Scheduled Sync
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天凌晨自动运行一次
+  workflow_dispatch:      # 允许你手动点击运行
+
+jobs:
+  sync_latest_from_upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v3
+        with:
+          ref: main       # 如果你的主分支叫 master，请把这里改成 master
+
+      - name: Sync upstream changes
+        id: sync
+        uses: ahmadnassri/action-upstream-sync@v3
+        with:
+          upstream_repository: cmliu/edgetunnel  # 这里要改成原作者的路径
+          target_branch: main                    # 你的分支名
+          upstream_branch: main                  # 原作者的分支名
